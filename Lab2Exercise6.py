@@ -1,62 +1,89 @@
-print("ET0735 (DevOps for AIoT) - Lab 2 - Introduction to Python")  
+print("ET0735 (DevOps for AIoT) - Lab 2 - Introduction to Python")
 
 def display_main_menu():
     print("display_main_menu")
     print("Enter some numbers separated by commas (e.g. 5, 67, 32)")
 
+
 def get_user_input():
     print("get_user_input")
-    userinput = input()
-    input_list = userinput.split(",")
-    print(input_list)
-    return input_list
+    inputstr = input()   # Read the number sequence entered by user.
+    
+    # Separate the numbers sequence into short strings, using the split() function
+    strlist = inputstr.split(",")
+    print("After split:", strlist)
 
-def calc_average(strlist):
-    print("calc_average") 
-    total = 0.0  
-    for i in strlist:
-        total = total + len(strlist)
-    average = total / len(strlist)
+    # Convert every element in the strlist from string to float.
+    floatlist = []    # Create an empty list
+    for eachstr in strlist:
+        floatlist.append(float(eachstr))   # Append element to the floatlist
+    print("Data List:", floatlist)
+    return floatlist
+
+
+def calc_average(datalist):
+    print("calc_average")
+    total = 0.0
+    for eachData in datalist:
+        total = sum(datalist)
+    # The two lines above can be replaced by
+    # total = sum(datalist)
+    average = total / len(datalist)
+    print("Average = ", average)
     return average
 
-def find_min_max(strlist):
+
+def find_min_max(datalist):
     print("find_min_max")
-    floatlist = []
-    for i in strlist:
-        floatlist.append(float(i))
-
-    floatlist.sort()
-    max = floatlist[-1]
-    min = floatlist[0]
-    print("Max = ", max)
-    print("Min = ", min)
-    return(min, max)
+    sortedlist = sort_temperature(datalist)
+    print("MIN = ", sortedlist[0])
+    print("MAX = ", sortedlist[-1])
+    return (sortedlist[0], sortedlist[-1])
 
 
-def sort_temperature(input_list):
+
+def sort_temperature(originalList):
     print("sort_temperature")
-    input_list.sort()
+    # The sort() function alters the list. In order
+    # not to corrupt the originalList, make a copy of it,
+    # and do the sorting on the copy.
+    floatlist = originalList.copy()   # make a copy
+    floatlist.sort()
+    print("Sorted list = ", floatlist)
+    return floatlist
 
-def calc_median_temperature(input_list):
+
+
+def calc_median_temperature(datalist):
     print("calc_median_temperature")
-    if len(input_list) % 2 == 1:
-        median = input_list(len(input_list) // 2)
+    sortedlist = sort_temperature(datalist)
+    listLen = len(sortedlist)
+    if listLen % 2 == 1:   # Odd number, just take the middle data
+        median = sortedlist[listLen//2]
+    else:  # Even number, take the average of the two data at the middle
+        median = (sortedlist[listLen//2 - 1] + sortedlist[listLen//2])/2
+    return median
 
-    else:
-        median = (input_list[cnt//2] + input_list[cnt//2-1])/2
-    print("Median = ", median)
 
 
 
 def main():
-    print("ET0735 (DevOps for AIoT) - Lab 2 - Introduction to Python")
+    print("*** ET0735 Lab 2 Ex3")
     display_main_menu()
-    num_list = get_user_input()
-    calc_average(floatlist)
-    find_min_max(floatlist)
-    sort_temperature(floatlist)
-    print("After sorting = ", floatlist)
-    calc_median_temperature(floatlist)
-    
+    resultlist = get_user_input()
+
+    avg = calc_average(resultlist)
+    print("*** Average is ", avg)
+
+    minimum, maximum = find_min_max(resultlist)
+    print("*** Minimum is ", minimum)
+    print("*** Maximum is ", maximum)
+
+    medianTemp = calc_median_temperature(resultlist)
+    print("*** Median is ", medianTemp)    
+    print("*** End of program")
+
+
+
 if __name__ == "__main__":
     main()
